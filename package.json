@@ -1,0 +1,24 @@
+{
+  "name": "quizzsofka",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mathiaslabora/quizzSofka.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mathiaslabora/quizzSofka/issues"
+  },
+  "homepage": "https://github.com/mathiaslabora/quizzSofka#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "mongodb": "^4.3.0"
+  }
+}
