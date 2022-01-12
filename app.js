@@ -15,12 +15,24 @@ app.use(express.json());
 //conection db
 const { MongoClient } = require('mongodb');
 const password = 'quiz';
-const nameDB = 'quizSofka'
+const nameDB = 'quizSofka';
 const URI = `mongodb+srv://quiz:${password}@cluster0.9npo9.mongodb.net/${nameDB}?retryWrites=true&w=majority`
 const client = new MongoClient(URI, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = client.db(nameDB);
 
 
+//routes to db
+app.get("/quest", async (req, res) => {
+    try {
+        await client.connect();
+        const quest = await db.collection('quest4cat').find().toArray()
+        res.json(quest)
+    } catch (error) {
+        console.log(error)
+        
+    }
+    await client.close()
+});
 
 
 

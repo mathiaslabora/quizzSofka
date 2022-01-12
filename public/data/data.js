@@ -1,5 +1,4 @@
-//getjson para atrapar json que traemos de la db
-let getJSONData = function (url) {
+/* let getJSONData = function (url) {
     let result = {};
     return fetch(url)
       .then(response => {
@@ -20,15 +19,17 @@ let getJSONData = function (url) {
         return result;
       });
   }
-  let questions;
-  let route = "/quest"
-//ejecucion de modal bienvenida
-$(window).on('load',function(){
-    $('#exampleModal').modal('show');
-});
+export let data;
+async function takeJson () {
+    const gtdata= (await getJSONData("/quest")).data
+    data = gtdata;
+}
+takeJson();
+console.log(data)
 document.addEventListener("DOMContentLoaded", async function (e) {
+    
+   
+    
+}); */
 
-    const gtdata= (await getJSONData(route)).data
-    questions = gtdata
-    console.log(questions)
-});
+
