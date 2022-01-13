@@ -1,3 +1,4 @@
+//creacion clase jugador
 export class Player{
     constructor(name, score){
         this.name = name;
