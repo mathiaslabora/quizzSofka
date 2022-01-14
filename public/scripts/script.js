@@ -66,9 +66,7 @@ const messageAndUpScore = (namLvl, numbScore) => {
     player.score += numbScore
 
     updateDataUser();
-    //ingreso titulo nivel y cat
-
-
+    
     //reinicia contador
     countNextQuest = 0
 }

@@ -15,8 +15,8 @@ app.use(express.json());
 //conection db
 const { MongoClient } = require('mongodb');
 const { response } = require('express');
-const password = 'quiz';
-const nameDB = 'quizSofka';
+const password = 'quiz';//contraseña db
+const nameDB = 'quizSofka';//nombre db
 const URI = `mongodb+srv://quiz:${password}@cluster0.9npo9.mongodb.net/${nameDB}?retryWrites=true&w=majority`
 const client = new MongoClient(URI, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = client.db(nameDB);
@@ -38,7 +38,6 @@ app.get("/nivel/:index", async (req, res) => {
 
 app.post("/saveProgress", async (req, res) => {
     let body = req.body
-    console.log(body)
     try {
         await client.connect()
         await db.collection('register').insertOne(body)
