@@ -12,7 +12,7 @@ let putPlayer = document.getElementById('user');
 let putScore = document.getElementById('score');
 //ingreso titulo nivel
 let lvlPut = document.getElementById('lvlPut');
-//donde se guarda temporalmente el alert
+//msje siguiente nivel
 let putAlert = document.getElementById("putAlert");
 //obj jugador
 let player;
@@ -56,12 +56,11 @@ const updateDataUser = () => {
 
 //creo mensaje al fin de ronda, aumento score
 const messageAndUpScore = (namLvl, numbScore) => {
-    putAlert.innerHTML = ` <div class="alert alert-primary d-flex" role="alert">
- Felicitaciones, avanzaste al ${namLvl} y ganaste ${numbScore} Quizzez!!
-</div>`
+    putAlert.innerHTML = `Felicitaciones, avanzaste al ${namLvl} y ganaste ${numbScore} Quizzez!!`
+    $('#msgNextLvl').modal('toggle')
     setTimeout(() => {
-        putAlert.innerHTML = "";
-    }, 3200)
+        $('#msgNextLvl').modal('toggle')
+    }, 3000)
     //sumo al score, el nuevo score obtenido
     player.score += numbScore
 

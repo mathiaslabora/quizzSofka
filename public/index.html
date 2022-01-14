@@ -11,10 +11,10 @@
   integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
   crossorigin="anonymous"></script>
   <link href="./styles/styles.css" rel="stylesheet">
+  <script src="./scripts/script.js" type="module"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js"
   integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
   crossorigin="anonymous"></script>
-  <script src="./scripts/script.js" type="module"></script>
   <title>Quizz game!!</title>
 </head>
 
@@ -27,7 +27,7 @@
       </a>
     </div>
   </nav>
-  <div id="putAlert"></div>
+
   <div class="container z">
     <div class="row justify-content-center" id="level">
       <div class="col-auto" id="lvlPut">
@@ -143,7 +143,18 @@
     </div>
   </div>
 
-
+  <div class="modal fade" id="msgNextLvl" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+        <div class="modal-body" id="putAlert">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 
