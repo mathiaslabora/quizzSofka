@@ -10,19 +10,19 @@ let quesPut = document.getElementById('quest');
 let putPlayer = document.getElementById('user');
 //ingreso score
 let putScore = document.getElementById('score');
-//obj jugador
-let player;
 //ingreso titulo nivel
 let lvlPut = document.getElementById('lvlPut');
+//donde se guarda temporalmente el alert
+let putAlert = document.getElementById("putAlert");
+//obj jugador
+let player;
 //guarda json de preguntas
 let jsonQuest;
 //obj preguntas
 let questions;
 //contador para preguntas
 let countNextQuest = 0;
-//donde se guarda temporalmente el alert
-let putAlert = document.getElementById("putAlert")
-//ejecucion de modal bienvenida
+
 
 //aumentador de indice preguntas
 const addToQues = () => {
@@ -56,7 +56,7 @@ const updateDataUser = () => {
 
 //creo mensaje al fin de ronda, aumento score
 const messageAndUpScore = (namLvl, numbScore) => {
-    putAlert.innerHTML = ` <div class="alert alert-primary" role="alert">
+    putAlert.innerHTML = ` <div class="alert alert-primary d-flex" role="alert">
  Felicitaciones, avanzaste al ${namLvl} y ganaste ${numbScore} Quizzez!!
 </div>`
     setTimeout(() => {
@@ -66,7 +66,7 @@ const messageAndUpScore = (namLvl, numbScore) => {
     player.score += numbScore
 
     updateDataUser();
-    
+
     //reinicia contador
     countNextQuest = 0
 }
@@ -98,6 +98,7 @@ const showQandOptions = (param) => {
                     //al finalizar el if, el swich realiza acciones dependiendo de la ronda en la que este
                     switch (level) {
                         case "level1":
+                            //modificando level, referencio la peticion al serv, para que traiga las preguntas en base al nivel.
                             level = "level2"
                             messageAndUpScore("Nivel 2", 100)
                             jsonGet(level);
@@ -169,7 +170,7 @@ const jsonGet = async (index) => {
 //funciones que guarda datos en DB y redirige
 const leaveEnd = () => {
     leaveOrWin();
-
+    //spinner
     document.getElementById('putAlert').innerHTML = `
     <div class="spinner-grow text-primary align-items-center" role="status">
   <span class="visually-hidden">Loading...</span>
@@ -179,6 +180,7 @@ const leaveEnd = () => {
     }, 2500)
 
 }
+// funcion para post, se usa dentro de leaveEnd
 const leaveOrWin = async () => {
     if (player.score != 0) {
         await fetch("/saveProgress", {
@@ -214,8 +216,13 @@ document.addEventListener("DOMContentLoaded", async function (e) {
 
     //boton abre modal cuando intenta abandonar
     document.getElementById('btnLeave').addEventListener('click', () => {
-        document.getElementById('msgScore').innerHTML = `Está a punto de abandonar el juego con: ${player.score} Quizzes, desea coninuar?`
-        $('#modalLeave').modal('toggle')
+        if (player.score === 0) {
+            document.getElementById('msgScore').innerHTML = `Está a punto de abandonar el juego con: ${player.score} Quizzes, No figurará en el Ranking! desea continuar?`
+            $('#modalLeave').modal('toggle')
+        } else {
+            document.getElementById('msgScore').innerHTML = `Está a punto de abandonar el juego con: ${player.score} Quizzes, desea coninuar?`
+            $('#modalLeave').modal('toggle')
+        }
     })
     //comportamiento boton abandonar dentro del modal
     document.getElementById('leave').addEventListener('click', leaveEnd)
@@ -223,8 +230,6 @@ document.addEventListener("DOMContentLoaded", async function (e) {
     document.getElementById('endWin').addEventListener('click', leaveEnd)
     //comportamiento boton al perder partida
     document.getElementById('btnLoose').addEventListener('click', () => {
-
         window.location.href = "index.html";
-
     })
 });

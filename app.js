@@ -28,10 +28,8 @@ app.get("/nivel/:index", async (req, res) => {
         await client.connect();
         const quest = await db.collection(req.params.index).find().toArray()
         res.json(quest)
-
     } catch (error) {
         console.log(error)
-
     }
     await client.close()
 });
@@ -56,7 +54,6 @@ app.get("/ranking", async (req, res) => {
     }
     await client.close()
 });
-
 
 //init server
 app.listen(port, () => {
