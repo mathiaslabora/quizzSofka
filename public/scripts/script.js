@@ -48,9 +48,9 @@ const messageAndUpScore = (namLvl, numbScore) => {
     player.score += numbScore
 
     updateDataUser();
-//ingreso titulo nivel
+    //ingreso titulo nivel
     lvlPut.innerHTML = `<h2>${namLvl}</h2>`
-//reinicia contador
+    //reinicia contador
     countNextQuest = 0
 }
 
@@ -66,42 +66,47 @@ const showQandOptions = (param) => {
             //valida si respuesta es la correcta:
             let validatorAns = questions[countNextQuest].corrAnswer(button.innerText)
             if (!validatorAns) {
-                console.log('hola')
-            }
-            if (countNextQuest < 4) {
-                addToQues();
-                showQandOptions(questions[countNextQuest].options);
+                //ejecucion modal en caso de errar pregunta
+                $('#modalLoose').modal({ backdrop: 'static', keyboard: false });
+                $('#modalLoose').modal('toggle')
             } else {
-                //el swich realiza acciones dependiendo de la ronda en la que este
-                switch (level) {
-                    case "level1":
-                        level = "level2"
-                        messageAndUpScore("Nivel 2", 100)
-                        jsonGet(level);
-                        break;
-                    case "level2":
-                        level = "level3"
-                        messageAndUpScore("Nivel 3", 300)
-                        countNextQuest = 0
-                        jsonGet(level);
-                        break;
-                    case "level3":
-                        level = "level4"
-                        messageAndUpScore("Nivel 4", 500)
-                        countNextQuest = 0
-                        jsonGet(level);
-                        break;
-                    case "level4":
-                        level = "level5"
-                        messageAndUpScore("Nivel 5", 600)
-                        countNextQuest = 0
-                        jsonGet(level);
-                        break;
-                    case "level5":
-                        player.score += 1500
-                        alert('Felicidades, ganó el juego su recompenza final es de 1500 QUIZZES, total: ' + player.score + ' le mostraremos las clasificaciones')
-                        window.location.href = "ranking.html";
-                        break;
+                if (countNextQuest < 4) {
+                    addToQues();
+                    showQandOptions(questions[countNextQuest].options);
+                } else {
+                    //el swich realiza acciones dependiendo de la ronda en la que este
+                    switch (level) {
+                        case "level1":
+                            level = "level2"
+                            messageAndUpScore("Nivel 2", 100)
+                            jsonGet(level);
+                            break;
+                        case "level2":
+                            level = "level3"
+                            messageAndUpScore("Nivel 3", 300)
+                            countNextQuest = 0
+                            jsonGet(level);
+                            break;
+                        case "level3":
+                            level = "level4"
+                            messageAndUpScore("Nivel 4", 500)
+                            countNextQuest = 0
+                            jsonGet(level);
+                            break;
+                        case "level4":
+                            level = "level5"
+                            messageAndUpScore("Nivel 5", 600)
+                            countNextQuest = 0
+                            jsonGet(level);
+                            break;
+                        case "level5":
+                            player.score += 1500
+                            document.getElementById('msgWin').innerHTML = `Felicidades, ganó el juego, su recompenza final es de <b>1500 QUIZZES</b>, total: ${player.score}  le mostraremos las clasificaciones`
+                            $('#modalWin').modal({ backdrop: 'static', keyboard: false });
+                            $('#modalWin').modal('toggle')
+
+                            break;
+                    }
                 }
             }
         });
@@ -140,6 +145,32 @@ const jsonGet = async (index) => {
 }
 
 
+//funciones que guarda datos en DB y redirige
+const leaveEnd = () => {
+    leaveOrWin();
+    
+    document.getElementById('putAlert').innerHTML = `
+    <div class="spinner-grow text-primary align-items-center" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>`
+    setTimeout(() => {
+        window.location.href = "ranking.html"
+    }, 2500)
+    
+}
+const leaveOrWin = async () => {
+    if(player.score != 0){
+    await fetch("/saveProgress", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(player)
+    })
+    .catch(console.error)
+}
+}
+
 document.addEventListener("DOMContentLoaded", async function (e) {
     //abre modal e impide que se cierre con click fuera
     $('#exampleModal').modal({ backdrop: 'static', keyboard: false });
@@ -158,11 +189,21 @@ document.addEventListener("DOMContentLoaded", async function (e) {
         } else {
             alert("Debe ingresar nombre de Jugador")
         }
-
-
-
     })
 
+    //boton abre modal cuando intenta abandonar
+    document.getElementById('btnLeave').addEventListener('click', () => {
+        document.getElementById('msgScore').innerHTML = `Está a punto de abandonar el juego con: ${player.score} Quizzes, desea coninuar?`
+        $('#modalLeave').modal('toggle')
+    })
+    //comportamiento boton abandonar dentro del modal
+    document.getElementById('leave').addEventListener('click', leaveEnd)
+    //comportamiento boton juego ganado dentro de modal
+    document.getElementById('endWin').addEventListener('click', leaveEnd)
+    //comportamiento boton al perder partida
+    document.getElementById('btnLoose').addEventListener('click', () => {
 
-    /* document.getElementById() */
+        window.location.href = "index.html";
+
+    })
 });

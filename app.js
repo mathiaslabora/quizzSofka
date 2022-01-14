@@ -31,25 +31,35 @@ app.get("/nivel/:index", async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        
+
+    }
+    await client.close()
+});
+
+app.post("/saveProgress", async (req, res) => {
+    let body = req.body
+    console.log(body)
+    try {
+        await client.connect()
+        await db.collection('register').insertOne(body)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+app.get("/ranking", async (req, res) => {
+    try {
+        await client.connect();
+        const quest = await db.collection('register').find().toArray()
+        res.json(quest)
+    } catch (error) {
+        console.log(error)
     }
     await client.close()
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
 //init server
-app.listen(port, () =>
-{
+app.listen(port, () => {
     console.log(`App iniciada en el puerto ${port}`)
 });
