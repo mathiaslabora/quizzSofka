@@ -32,8 +32,26 @@ const addToQues = () => {
 //actualizo los datos cada que cambia de ronda.
 const updateDataUser = () => {
     //pongo datos input player y score
-    putPlayer.innerHTML = `<b>${player.name}</b>`;
-    putScore.innerHTML = `<b>${player.score}</b>`;
+    putPlayer.innerHTML = `<h5>${player.name}</h5>`;
+    putScore.innerHTML = `<h5>${player.score}</h5>`;
+    //cambio titulo segun ronda
+    switch (level) {
+        case "level1":
+            lvlPut.innerHTML = `<h2>Nivel 1 - Geografía</h2>`
+            break;
+        case "level2":
+            lvlPut.innerHTML = `<h2>Nivel 2 - Matemática</h2>`
+            break;
+        case "level3":
+            lvlPut.innerHTML = `<h2>Nivel 3 - Música</h2>`
+            break;
+        case "level4":
+            lvlPut.innerHTML = `<h2>Nivel 4 - Inglés</h2>`
+            break;
+        case "level5":
+            lvlPut.innerHTML = `<h2>Nivel 5 - Programación</h2>`
+            break;
+    }
 }
 
 //creo mensaje al fin de ronda, aumento score
@@ -48,16 +66,20 @@ const messageAndUpScore = (namLvl, numbScore) => {
     player.score += numbScore
 
     updateDataUser();
-    //ingreso titulo nivel
-    lvlPut.innerHTML = `<h2>${namLvl}</h2>`
+    //ingreso titulo nivel y cat
+
+
     //reinicia contador
     countNextQuest = 0
 }
 
 //func para creacion de preguntas aleatoriamente, introducir en botones las opciones.
 const showQandOptions = (param) => {
-    quesPut.innerHTML = `<b>${questions[countNextQuest].quest}</b>`;
+    //coloco pregunta
+    quesPut.innerHTML = `<h4>${questions[countNextQuest].quest}</h4>`;
+    //limpio botones
     document.getElementById('addBtn').innerHTML = ""
+    //genera botones con las opciones de respuesta
     for (let i = 0; i <= 3; i++) {
         const button = document.createElement("button");
         button.className = "btn btn-primary";
@@ -70,11 +92,12 @@ const showQandOptions = (param) => {
                 $('#modalLoose').modal({ backdrop: 'static', keyboard: false });
                 $('#modalLoose').modal('toggle')
             } else {
+                //para si esta dentro de la cantidad de preguntas
                 if (countNextQuest < 4) {
                     addToQues();
                     showQandOptions(questions[countNextQuest].options);
                 } else {
-                    //el swich realiza acciones dependiendo de la ronda en la que este
+                    //al finalizar el if, el swich realiza acciones dependiendo de la ronda en la que este
                     switch (level) {
                         case "level1":
                             level = "level2"
@@ -148,7 +171,7 @@ const jsonGet = async (index) => {
 //funciones que guarda datos en DB y redirige
 const leaveEnd = () => {
     leaveOrWin();
-    
+
     document.getElementById('putAlert').innerHTML = `
     <div class="spinner-grow text-primary align-items-center" role="status">
   <span class="visually-hidden">Loading...</span>
@@ -156,19 +179,19 @@ const leaveEnd = () => {
     setTimeout(() => {
         window.location.href = "ranking.html"
     }, 2500)
-    
+
 }
 const leaveOrWin = async () => {
-    if(player.score != 0){
-    await fetch("/saveProgress", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(player)
-    })
-    .catch(console.error)
-}
+    if (player.score != 0) {
+        await fetch("/saveProgress", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(player)
+        })
+            .catch(console.error)
+    }
 }
 
 document.addEventListener("DOMContentLoaded", async function (e) {
